@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SwiftCover — Auto Insurance Quote &amp; Buy</title>
+<style>
+  :root {
+    --ink: #12233b;
+    --ink-soft: #4a5b74;
+    --line: #d7dee8;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --brand: #0a6b57;
+    --brand-dark: #085243;
+    --accent: #f2b705;
+    --error: #b3261e;
+    --ok: #0a6b57;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--brand);
+    color: #fff;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: .3px; }
+  header .tag { color: #cdeee6; font-size: .9rem; }
+  main { max-width: 720px; margin: 32px auto; padding: 0 16px; }
+  .steps {
+    display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .steps li {
+    list-style: none; flex: 1; min-width: 120px; text-align: center;
+    padding: 8px 6px; border-radius: var(--radius);
+    background: #e7edf3; color: var(--ink-soft); font-size: .85rem; font-weight: 600;
+  }
+  .steps li.active { background: var(--brand); color: #fff; }
+  .steps li.done { background: #cdeee6; color: var(--brand-dark); }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  h2 { font-size: 1.15rem; margin: 0 0 16px; }
+  label { display: block; font-weight: 600; margin: 14px 0 4px; font-size: .92rem; }
+  input[type="text"], input[type="number"] {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; font-size: 1rem;
+  }
+  input:focus { outline: 2px solid var(--brand); border-color: var(--brand); }
+  .radio-row, .check-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .radio-row input, .check-row input { width: 18px; height: 18px; }
+  .radio-row label, .check-row label { margin: 0; font-weight: 500; }
+  .hint { color: var(--ink-soft); font-size: .85rem; margin-top: 2px; }
+  .error {
+    color: var(--error); font-size: .85rem; margin-top: 4px; min-height: 1em;
+  }
+  .addon { border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .addon.disabled { opacity: .5; }
+  button {
+    background: var(--brand); color: #fff; border: none; cursor: pointer;
+    padding: 12px 22px; border-radius: 8px; font-size: 1rem; font-weight: 600;
+  }
+  button:hover { background: var(--brand-dark); }
+  button.secondary { background: #e7edf3; color: var(--ink); }
+  button.secondary:hover { background: #d7dee8; }
+  .actions { display: flex; justify-content: space-between; margin-top: 20px; }
+  .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .summary-row.total { font-weight: 700; font-size: 1.15rem; border-bottom: none; padding-top: 14px; }
+  .policy {
+    text-align: center; padding: 20px;
+  }
+  .policy .num {
+    font-size: 1.6rem; font-weight: 700; color: var(--brand);
+    letter-spacing: 1px; margin: 12px 0;
+  }
+  .badge { display: inline-block; background: #cdeee6; color: var(--brand-dark);
+    padding: 4px 12px; border-radius: 20px; font-size: .85rem; font-weight: 600; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">SwiftCover</span>
+  <span class="tag">Auto Insurance — Quote &amp; Buy</span>
+</header>
+
+<main>
+  <ul class="steps" id="steps">
+    <li data-step="1" class="active">1. Details</li>
+    <li data-step="2">2. Coverage</li>
+    <li data-step="3">3. Summary</li>
+    <li data-step="4">4. Payment</li>
+  </ul>
+
+  <!-- STEP 1 — QUOTE DETAILS -->
+  <section id="step-1" class="card">
+    <h1>Tell us about you and your vehicle</h1>
+    <p class="hint">All fields are required to calculate your quote.</p>
+
+    <label for="age">Driver age (years)</label>
+    <input type="number" id="age" data-testid="age" min="16" max="100" />
+    <div class="error" id="err-age" data-testid="err-age"></div>
+
+    <label for="experience">Driving experience (years)</label>
+    <input type="number" id="experience" data-testid="experience" min="0" max="80" />
+    <div class="error" id="err-experience" data-testid="err-experience"></div>
+
+    <label for="make">Vehicle make</label>
+    <input type="text" id="make" data-testid="make" />
+    <div class="error" id="err-make" data-testid="err-make"></div>
+
+    <label for="model">Vehicle model</label>
+    <input type="text" id="model" data-testid="model" />
+    <div class="error" id="err-model" data-testid="err-model"></div>
+
+    <label for="year">Vehicle year</label>
+    <input type="number" id="year" data-testid="year" min="1980" max="2026" />
+    <div class="error" id="err-year" data-testid="err-year"></div>
+
+    <label for="value">Vehicle value (USD)</label>
+    <input type="number" id="value" data-testid="value" min="0" />
+    <div class="hint">Required for Comprehensive cover.</div>
+    <div class="error" id="err-value" data-testid="err-value"></div>
+
+    <label for="registration">Registration number</label>
+    <input type="text" id="registration" data-testid="registration" placeholder="4–10 letters/numbers" />
+    <div class="error" id="err-registration" data-testid="err-registration"></div>
+
+    <div class="actions">
+      <span></span>
+      <button id="to-step-2" data-testid="continue-to-coverage">Continue to coverage</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 — COVERAGE -->
+  <section id="step-2" class="card hidden">
+    <h1>Choose your coverage</h1>
+
+    <h2>Coverage tier</h2>
+    <div class="radio-row">
+      <input type="radio" name="tier" id="tier-tp" value="third-party" data-testid="tier-third-party" />
+      <label for="tier-tp">Third-Party — covers damage to others ($500 base)</label>
+    </div>
+    <div class="radio-row">
+      <input type="radio" name="tier" id="tier-comp" value="comprehensive" data-testid="tier-comprehensive" />
+      <label for="tier-comp">Comprehensive — covers your vehicle + third-party ($800 base)</label>
+    </div>
+    <div class="error" id="err-tier" data-testid="err-tier"></div>
+
+    <h2 style="margin-top:20px;">Optional add-ons</h2>
+    <div class="addon" id="addon-roadside-wrap">
+      <div class="check-row">
+        <input type="checkbox" id="addon-roadside" data-testid="addon-roadside" />
+        <label for="addon-roadside">Roadside Assistance (+$40)</label>
+      </div>
+    </div>
+    <div class="addon" id="addon-zerodep-wrap">
+      <div class="check-row">
+        <input type="checkbox" id="addon-zerodep" data-testid="addon-zerodep" />
+        <label for="addon-zerodep">Zero Depreciation (+$75, Comprehensive only)</label>
+      </div>
+      <div class="hint" id="zerodep-hint">Available with Comprehensive cover only.</div>
+    </div>
+    <div class="error" id="err-coverage" data-testid="err-coverage"></div>
+
+    <div class="actions">
+      <button class="secondary" id="back-to-1" data-testid="back-to-details">Back</button>
+      <button id="to-step-3" data-testid="continue-to-summary">See my quote</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 — SUMMARY -->
+  <section id="step-3" class="card hidden">
+    <h1>Your quote</h1>
+    <div id="summary-body"></div>
+    <div class="actions">
+      <button class="secondary" id="back-to-2" data-testid="back-to-coverage">Back</button>
+      <button id="to-step-4" data-testid="continue-to-payment">Proceed to payment</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 — PAYMENT -->
+  <section id="step-4" class="card hidden">
+    <h1>Payment</h1>
+    <p class="hint">This is a demo. Do not enter real card details.</p>
+
+    <label for="card">Card number</label>
+    <input type="text" id="card" data-testid="card-number" placeholder="4111 1111 1111 1111" />
+    <div class="error" id="err-card" data-testid="err-card"></div>
+
+    <label for="expiry">Expiry (MM/YY)</label>
+    <input type="text" id="expiry" data-testid="card-expiry" placeholder="12/28" />
+    <div class="error" id="err-expiry" data-testid="err-expiry"></div>
+
+    <label for="cvv">CVV</label>
+    <input type="text" id="cvv" data-testid="card-cvv" placeholder="123" />
+    <div class="error" id="err-cvv" data-testid="err-cvv"></div>
+
+    <div class="summary-row total">
+      <span>Amount to pay</span>
+      <span id="pay-amount" data-testid="pay-amount"></span>
+    </div>
+
+    <div class="actions">
+      <button class="secondary" id="back-to-3" data-testid="back-to-summary">Back</button>
+      <button id="pay-now" data-testid="pay-now">Pay &amp; get policy</button>
+    </div>
+  </section>
+
+  <!-- CONFIRMATION -->
+  <section id="confirmation" class="card hidden">
+    <div class="policy">
+      <span class="badge" data-testid="confirmation-badge">Policy issued</span>
+      <h1>You're covered</h1>
+      <p>Your policy number is</p>
+      <div class="num" id="policy-number" data-testid="policy-number"></div>
+      <div class="summary-row total">
+        <span>Premium paid</span>
+        <span id="final-premium" data-testid="final-premium"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const state = {
+  age: null, experience: null, make: "", model: "", year: null,
+  value: null, registration: "",
+  tier: null, roadside: false, zerodep: false,
+  premium: null,
+};
+
+const $ = (id) => document.getElementById(id);
+const money = (n) => "$" + n.toFixed(2);
+
+// ── Step navigation ────────────────────────────────────────────────────────
+function showStep(n) {
+  ["step-1","step-2","step-3","step-4","confirmation"].forEach(s => $(s).classList.add("hidden"));
+  if (n === "confirmation") $("confirmation").classList.remove("hidden");
+  else $("step-" + n).classList.remove("hidden");
+
+  document.querySelectorAll("#steps li").forEach(li => {
+    const step = Number(li.dataset.step);
+    li.classList.remove("active","done");
+    if (typeof n === "number") {
+      if (step < n) li.classList.add("done");
+      else if (step === n) li.classList.add("active");
+    }
+  });
+  window.scrollTo(0, 0);
+}
+
+function clearErrors(ids) { ids.forEach(id => { $(id).textContent = ""; }); }
+
+// ── Step 1 validation ──────────────────────────────────────────────────────
+$("to-step-2").addEventListener("click", () => {
+  clearErrors(["err-age","err-experience","err-make","err-model","err-year","err-value","err-registration"]);
+  let ok = true;
+
+  const age = parseInt($("age").value, 10);
+  const exp = parseInt($("experience").value, 10);
+  const make = $("make").value.trim();
+  const model = $("model").value.trim();
+  const year = parseInt($("year").value, 10);
+  const value = parseFloat($("value").value);
+  const reg = $("registration").value.trim();
+
+  if (!Number.isFinite(age) || age < 16) { $("err-age").textContent = "Enter a valid driver age (16+)."; ok = false; }
+  if (!Number.isFinite(exp) || exp < 0) { $("err-experience").textContent = "Enter years of driving experience."; ok = false; }
+  if (!make) { $("err-make").textContent = "Vehicle make is required."; ok = false; }
+  if (!model) { $("err-model").textContent = "Vehicle model is required."; ok = false; }
+  if (!Number.isFinite(year) || year < 1980 || year > 2026) { $("err-year").textContent = "Enter a valid vehicle year."; ok = false; }
+  if (!Number.isFinite(value) || value < 0) { $("err-value").textContent = "Enter the vehicle value."; ok = false; }
+
+  // AC-5 — registration mandatory + 4–10 alphanumeric
+  if (!reg) { $("err-registration").textContent = "Registration number is required."; ok = false; }
+  else if (!/^[A-Za-z0-9]{4,10}$/.test(reg)) { $("err-registration").textContent = "Registration must be 4–10 letters or numbers."; ok = false; }
+
+  if (!ok) return;
+
+  Object.assign(state, { age, experience: exp, make, model, year, value, registration: reg });
+  updateZeroDepAvailability();
+  showStep(2);
+});
+
+// ── Step 2 — coverage rules ────────────────────────────────────────────────
+function updateZeroDepAvailability() {
+  const tier = document.querySelector('input[name="tier"]:checked')?.value;
+  const zdWrap = $("addon-zerodep-wrap");
+  const zd = $("addon-zerodep");
+  // AC-3 — Zero Dep only with Comprehensive; AC-4 — Comprehensive needs value > 0
+  const compAllowed = tier === "comprehensive";
+  if (!compAllowed) {
+    zd.checked = false;
+    zd.disabled = true;
+    zdWrap.classList.add("disabled");
+    $("zerodep-hint").textContent = "Available with Comprehensive cover only.";
+  } else {
+    zd.disabled = false;
+    zdWrap.classList.remove("disabled");
+    $("zerodep-hint").textContent = "Protects against depreciation on claims.";
+  }
+}
+
+document.querySelectorAll('input[name="tier"]').forEach(r =>
+  r.addEventListener("change", () => { clearErrors(["err-coverage","err-tier"]); updateZeroDepAvailability(); })
+);
+
+$("back-to-1").addEventListener("click", () => showStep(1));
+
+$("to-step-3").addEventListener("click", () => {
+  clearErrors(["err-tier","err-coverage"]);
+  const tier = document.querySelector('input[name="tier"]:checked')?.value;
+  let ok = true;
+
+  if (!tier) { $("err-tier").textContent = "Please choose a coverage tier."; ok = false; }
+
+  // AC-4 — Comprehensive requires vehicle value > 0
+  if (tier === "comprehensive" && (!Number.isFinite(state.value) || state.value <= 0)) {
+    $("err-coverage").textContent = "Comprehensive cover requires a vehicle value greater than $0. Go back and enter a valid value.";
+    ok = false;
+  }
+
+  // AC-3 — Zero Dep must not apply to Third-Party (defensive)
+  const zerodep = $("addon-zerodep").checked && tier === "comprehensive";
+  if ($("addon-zerodep").checked && tier !== "comprehensive") {
+    $("err-coverage").textContent = "Zero Depreciation is only available with Comprehensive cover.";
+    ok = false;
+  }
+
+  if (!ok) return;
+
+  state.tier = tier;
+  state.roadside = $("addon-roadside").checked;
+  state.zerodep = zerodep;
+  state.premium = calculatePremium(state);
+  renderSummary();
+  showStep(3);
+});
+
+// ── Premium calculation (implements AC-1, 2, 6, 7) ─────────────────────────
+function calculatePremium(s) {
+  let base = s.tier === "comprehensive" ? 800 : 500;
+
+  // add-ons (flat)
+  if (s.roadside) base += 40;
+  if (s.zerodep) base += 75;
+
+  // AC-1 — young driver surcharge (+20% if age < 25), applied after add-ons
+  if (s.age < 25) base = base * 1.20;
+
+  // Discounts — AC-2 experienced driver (−10% if experience >= 5)
+  let discountPct = 0;
+  if (s.experience >= 5) discountPct += 10;
+
+  // AC-6 — discount cap at 20%
+  if (discountPct > 20) discountPct = 20;
+
+  let premium = base * (1 - discountPct / 100);
+
+  // AC-7 — minimum premium floor $300
+  if (premium < 300) premium = 300;
+
+  return Math.round(premium * 100) / 100;
+}
+
+function renderSummary() {
+  const s = state;
+  const rows = [];
+  rows.push(row("Coverage", s.tier === "comprehensive" ? "Comprehensive" : "Third-Party"));
+  rows.push(row("Base premium", money(s.tier === "comprehensive" ? 800 : 500)));
+  if (s.roadside) rows.push(row("Roadside Assistance", "+$40.00"));
+  if (s.zerodep) rows.push(row("Zero Depreciation", "+$75.00"));
+  if (s.age < 25) rows.push(row("Young driver surcharge", "+20%"));
+  if (s.experience >= 5) rows.push(row("Experienced driver discount", "−10%"));
+  rows.push(`<div class="summary-row total"><span>Total premium</span><span data-testid="summary-premium">${money(s.premium)}</span></div>`);
+  $("summary-body").innerHTML = rows.join("");
+}
+function row(label, val) {
+  return `<div class="summary-row"><span>${label}</span><span>${val}</span></div>`;
+}
+
+$("back-to-2").addEventListener("click", () => showStep(2));
+
+// ── Step 4 — payment ───────────────────────────────────────────────────────
+$("to-step-4").addEventListener("click", () => {
+  $("pay-amount").textContent = money(state.premium);
+  showStep(4);
+});
+$("back-to-3").addEventListener("click", () => showStep(3));
+
+$("pay-now").addEventListener("click", () => {
+  clearErrors(["err-card","err-expiry","err-cvv"]);
+  let ok = true;
+  const card = $("card").value.replace(/\s+/g, "");
+  const expiry = $("expiry").value.trim();
+  const cvv = $("cvv").value.trim();
+
+  if (!/^\d{16}$/.test(card)) { $("err-card").textContent = "Enter a 16-digit card number."; ok = false; }
+  if (!/^\d{2}\/\d{2}$/.test(expiry)) { $("err-expiry").textContent = "Enter expiry as MM/YY."; ok = false; }
+  if (!/^\d{3}$/.test(cvv)) { $("err-cvv").textContent = "Enter a 3-digit CVV."; ok = false; }
+  if (!ok) return;
+
+  // AC-8 — policy number issued only after successful payment
+  const policy = "SC-" + Math.floor(10000000 + Math.random() * 89999999);
+  $("policy-number").textContent = policy;
+  $("final-premium").textContent = money(state.premium);
+  showStep("confirmation");
+});
+</script>
+</body>
+</html>
