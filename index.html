@@ -62,6 +62,7 @@
   .radio-row, .check-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
   .radio-row input, .check-row input { width: 18px; height: 18px; }
   .radio-row label, .check-row label { margin: 0; font-weight: 500; }
+  .radio-row.disabled label, .check-row.disabled label { color: var(--ink-soft); }
   .hint { color: var(--ink-soft); font-size: .85rem; margin-top: 2px; }
   .error {
     color: var(--error); font-size: .85rem; margin-top: 4px; min-height: 1em;
@@ -149,14 +150,15 @@
     <h1>Choose your coverage</h1>
 
     <h2>Coverage tier</h2>
-    <div class="radio-row">
+    <div class="radio-row" id="tier-tp-row">
       <input type="radio" name="tier" id="tier-tp" value="third-party" data-testid="tier-third-party" />
       <label for="tier-tp">Third-Party — covers damage to others ($500 base)</label>
     </div>
-    <div class="radio-row">
+    <div class="radio-row" id="tier-comp-row">
       <input type="radio" name="tier" id="tier-comp" value="comprehensive" data-testid="tier-comprehensive" />
       <label for="tier-comp">Comprehensive — covers your vehicle + third-party ($800 base)</label>
     </div>
+    <div class="hint" id="comp-hint" data-testid="comp-hint"></div>
     <div class="error" id="err-tier" data-testid="err-tier"></div>
 
     <h2 style="margin-top:20px;">Optional add-ons</h2>
@@ -292,11 +294,33 @@ $("to-step-2").addEventListener("click", () => {
   if (!ok) return;
 
   Object.assign(state, { age, experience: exp, make, model, year, value, registration: reg });
-  updateZeroDepAvailability();
+  updateCoverageAvailability();
   showStep(2);
 });
 
 // ── Step 2 — coverage rules ────────────────────────────────────────────────
+// AC-4 — Comprehensive requires vehicle value > 0. When the value is 0 (or
+// missing), Comprehensive is DISABLED so it cannot be selected at all, and a
+// prompt explains why. This prevents an invalid coverage choice from ever being
+// held, rather than only warning after the fact.
+function updateCoverageAvailability() {
+  const compRadio = $("tier-comp");
+  const compRow = $("tier-comp-row");
+  const hasValue = Number.isFinite(state.value) && state.value > 0;
+
+  if (!hasValue) {
+    if (compRadio.checked) compRadio.checked = false;
+    compRadio.disabled = true;
+    compRow.classList.add("disabled");
+    $("comp-hint").textContent = "Enter a vehicle value greater than $0 (Step 1) to choose Comprehensive.";
+  } else {
+    compRadio.disabled = false;
+    compRow.classList.remove("disabled");
+    $("comp-hint").textContent = "";
+  }
+  updateZeroDepAvailability();
+}
+
 function updateZeroDepAvailability() {
   const tier = document.querySelector('input[name="tier"]:checked')?.value;
   const zdWrap = $("addon-zerodep-wrap");
