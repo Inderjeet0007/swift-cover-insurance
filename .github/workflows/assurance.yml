@@ -59,10 +59,9 @@ jobs:
         run: |
           kane-cli testrun run \
             --headless \
-            --timeout 600 \
+            --on-failure continue \
             --username "$LT_USERNAME" \
-            --access-key "$LT_ACCESS_KEY" \
-            --url "$APP_URL"
+            --access-key "$LT_ACCESS_KEY"
 
       # 6. Coverage report — proven (from the sealed pack) vs owed (from the
       #    .context/ graph). --json for a machine-readable artifact; also print
