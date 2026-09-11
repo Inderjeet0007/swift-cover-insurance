@@ -1,0 +1,108 @@
+name: Kane Assurance
+
+# ── Triggers ────────────────────────────────────────────────────────────────
+# Manual by default: Kane runs cost credits and need the app already deployed,
+# so we don't fire on every push. Trigger from the Actions tab → "Run workflow".
+on:
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: "URL to test against"
+        required: false
+        default: "https://inderjeet0007.github.io/swift-cover-insurance/"
+
+  # ── Optional: auto-run AFTER GitHub Pages finishes deploying ────────────────
+  # Uncomment to run once the Pages deploy completes, avoiding the race where
+  # tests would hit the old app. Replace the workflow name if yours differs.
+  #
+  # workflow_run:
+  #   workflows: ["pages-build-deployment"]
+  #   types: [completed]
+
+jobs:
+  assurance:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get the repo — app + tests/ + requirements/ + the .context/ store.
+      #    NOTE: the .context/ store and tests/output-*/ recordings MUST be
+      #    committed for coverage + replay to work in CI.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Node (Kane CLI needs Node 18+)
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 3. Chrome — Kane drives real Chrome via the DevTools Protocol
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      # 4. Install Kane CLI
+      - name: Install Kane CLI
+        run: npm install -g @testmuai/kane-cli@latest
+
+      # 5. Authenticate non-interactively from repo secrets
+      - name: Authenticate Kane CLI
+        run: |
+          kane-cli login \
+            --username "${{ secrets.KANE_USERNAME }}" \
+            --access-key "${{ secrets.KANE_ACCESS_KEY }}"
+
+      # 6. Resolve the target URL (manual input, or the default)
+      - name: Resolve app URL
+        id: url
+        run: echo "app_url=${{ github.event.inputs.app_url || 'https://inderjeet0007.github.io/swift-cover-insurance/' }}" >> "$GITHUB_OUTPUT"
+
+      # 7. Batch-run every committed *_test.md as ONE execution.
+      #    testrun seals a SINGLE evidence pack for the whole suite (ideal CI
+      #    artifact) and, because a .context/ store is present, writes coverage
+      #    records into that pack automatically.
+      #    --headless (no display) --agent (NDJSON, non-zero exit gates the job).
+      - name: Run Kane assurance suite
+        working-directory: tests
+        env:
+          KANE_CLI_CDP_TIMEOUT_MS: "60000"
+          KANE_CLI_CDP_RETRIES: "3"
+        run: |
+          kane-cli testrun run \
+            --headless \
+            --agent \
+            --url "${{ steps.url.outputs.app_url }}"
+
+      # 8. Coverage report — proven (from the sealed pack) vs owed (from the
+      #    .context/ graph). --json for a machine-readable artifact; also print
+      #    the human panel to the log. always() so we still get it on failure.
+      - name: Coverage report
+        if: always()
+        working-directory: tests
+        run: |
+          kane-cli cover || true
+          kane-cli cover --json > coverage.json || true
+
+      # 9. Upload the sealed evidence pack(s) as the evidence artifact.
+      - name: Upload evidence pack
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kane-evidence
+          path: |
+            tests/.testmuai/evidence/**
+            .testmuai/evidence/**
+            tests/output-*/**
+          if-no-files-found: warn
+          retention-days: 30
+
+      # 10. Upload the coverage report separately for quick access.
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kane-coverage
+          path: tests/coverage.json
+          if-no-files-found: warn
+          retention-days: 30
