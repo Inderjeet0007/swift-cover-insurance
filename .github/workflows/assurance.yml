@@ -60,6 +60,7 @@ jobs:
           kane-cli testrun run \
             --headless \
             --on-failure continue \
+            --parallel 4 \
             --username "$LT_USERNAME" \
             --access-key "$LT_ACCESS_KEY"
 
@@ -80,9 +81,9 @@ jobs:
         with:
           name: kane-evidence
           path: |
-            tests/.testmuai/evidence/**
-            ~/.testmuai/evidence/**
-            ~/.testmuai/kaneai/sessions/**
+            tests/.testmuai/evidence/*.evidence
+            tests/.testmuai/evidence/**/*
+            tests/**/.testmuai/evidence/**
             tests/output-*/**
           if-no-files-found: warn
           retention-days: 30
