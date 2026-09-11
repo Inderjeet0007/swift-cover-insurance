@@ -28,8 +28,8 @@ jobs:
       APP_URL: ${{ github.event.inputs.app_url || 'https://inderjeet0007.github.io/swift-cover-insurance/' }}
 
     steps:
-      # 1. Get the repo — app + tests/ + requirements/ + the .context/ store.
-      #    NOTE: the .context/ store and tests/output-*/ recordings MUST be
+      # 1. Get the repo — app + tests/ + requirements/.
+      #    NOTE: tests/output-*/ recordings MUST be
       #    committed for coverage + replay to work in CI.
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
       # 5. Batch-run every committed *_test.md as ONE execution → one evidence
       #    pack. Auth is passed INLINE (never `kane-cli login` in CI — that opens
       #    a browser OAuth flow). --headless: no display. --timeout: never hang.
-      #    Coverage records are written into the pack because tests/.context/ exists.
+      #    Coverage records are written into the pack because tests/ exists.
       - name: Run Kane assurance suite
         working-directory: tests
         run: |
@@ -65,7 +65,7 @@ jobs:
             --access-key "$LT_ACCESS_KEY"
 
       # 6. Coverage report — proven (from the sealed pack) vs owed (from the
-      #    .context/ graph). --json for a machine-readable artifact; also print
+      #    graph). --json for a machine-readable artifact; also print
       #    the human panel to the log. always() so we still get it on failure.
       - name: Coverage report
         if: always()
