@@ -1,0 +1,18 @@
+{
+  "commit_id": "9fb8e9a9-3c72-483d-9d46-d19cde34e07a",
+  "test_id": "928e1c0c-2617-43e9-b586-2e86d71adbd0",
+  "testcase_id": "01M28GPX5MBF3F3CW0M4X2B6CR",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-premium-recalculation-and-purchase-after-changing",
+  "executions": [
+    {
+      "execution_id": "b5d81c15-0406-46ce-9e50-9f3eea411cf8",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T15:34:40.356Z"
+    }
+  ]
+}

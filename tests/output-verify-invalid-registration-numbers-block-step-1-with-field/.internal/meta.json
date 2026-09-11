@@ -1,0 +1,18 @@
+{
+  "commit_id": "e1a0a7bd-5a97-4f15-b51d-36cf2585192b",
+  "test_id": "58eeb466-a49f-4e9b-9cbe-142b97bc944e",
+  "testcase_id": "01M28D50Z6SA93DPA26KBQPJWA",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-invalid-registration-numbers-block-step-1-with-field",
+  "executions": [
+    {
+      "execution_id": "6d5e59bc-1c82-40ca-b76a-a36dac066e0b",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T15:11:44.208Z"
+    }
+  ]
+}

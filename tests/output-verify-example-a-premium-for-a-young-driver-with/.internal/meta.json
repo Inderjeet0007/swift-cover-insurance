@@ -1,0 +1,18 @@
+{
+  "test_id": "8bcf0971-927c-4434-a584-11f669f91acb",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-example-a-premium-for-a-young-driver-with",
+  "commit_id": "04b4e75e-86bf-48ad-b376-9e5428fd9ef0",
+  "testcase_id": "01M289QXWA3V46989Z19E1HZ5J",
+  "executions": [
+    {
+      "execution_id": "ca88c304-572b-4c35-ba98-4ee017ead494",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T13:18:32.156Z"
+    }
+  ]
+}

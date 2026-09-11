@@ -1,0 +1,18 @@
+{
+  "test_id": "6f87007c-8955-4b26-b020-e8cf6ec19a78",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-example-a-purchase-issues-a-policy-for-the-worked",
+  "commit_id": "ce78ab80-53d2-460c-be76-8ce3cdbe257d",
+  "testcase_id": "01M28AFME8R6H449BPZ3FY5FH9",
+  "executions": [
+    {
+      "execution_id": "e6b6d744-0d06-430e-ac62-6b80e4190404",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T13:33:54.091Z"
+    }
+  ]
+}

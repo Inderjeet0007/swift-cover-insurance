@@ -1,0 +1,18 @@
+{
+  "test_id": "24af92c1-01ea-44ce-aafd-64c16c5b42e6",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-third-party-coverage-prevents-zero-depreciation",
+  "commit_id": "e762bbfa-5a52-4823-8d3a-6e02c6941852",
+  "testcase_id": "01M28HRWMQ50Y69X8XYA6NF6W3",
+  "executions": [
+    {
+      "execution_id": "201f46f4-5ea6-42c8-800b-e292045f6b49",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T15:38:21.428Z"
+    }
+  ]
+}

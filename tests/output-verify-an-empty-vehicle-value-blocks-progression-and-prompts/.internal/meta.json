@@ -1,0 +1,18 @@
+{
+  "test_id": "5073b80f-8e29-4eb3-a474-c78b45e3fd88",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-an-empty-vehicle-value-blocks-progression-and-prompts",
+  "commit_id": "3f8546ee-9906-4ea4-aa14-61cdcbf91582",
+  "testcase_id": "01M2887SX1W135GKCSZN0GDWN1",
+  "executions": [
+    {
+      "execution_id": "5c3ec873-a365-4d1a-bb45-17fbc04eb29b",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T12:51:36.952Z"
+    }
+  ]
+}

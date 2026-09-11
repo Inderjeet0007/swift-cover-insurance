@@ -1,0 +1,18 @@
+{
+  "commit_id": "5f73267b-fdc4-42d3-8ed4-69eb6ee43b98",
+  "test_id": "ea29ab22-ba16-456f-b342-10ed4de6b320",
+  "testcase_id": "01M28CD7Z0Q1M4BW8E0WNBRBSJ",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-example-c-purchase-issues-a-policy-for-the-worked",
+  "executions": [
+    {
+      "execution_id": "26253b97-68c0-4a16-b544-c89bf90d7097",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T14:13:44.917Z"
+    }
+  ]
+}

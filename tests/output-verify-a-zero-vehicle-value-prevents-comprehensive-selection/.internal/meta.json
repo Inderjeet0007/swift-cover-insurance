@@ -1,0 +1,18 @@
+{
+  "commit_id": "2adfca61-dddb-4e3f-a9ca-2ccf95412421",
+  "test_id": "31bec0c9-da49-4a3a-82ca-4c38c58a35a9",
+  "testcase_id": "01M26HZCFKT8622P4891HSNXTQ",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-a-zero-vehicle-value-prevents-comprehensive-selection",
+  "executions": [
+    {
+      "execution_id": "0bcb036e-503f-4109-9891-aedd57814677",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T11:51:15.570Z"
+    }
+  ]
+}

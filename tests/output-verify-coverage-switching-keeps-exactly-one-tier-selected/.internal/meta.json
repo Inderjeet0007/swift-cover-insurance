@@ -1,0 +1,18 @@
+{
+  "test_id": "460a80ee-8e18-4b0e-89fa-794dd67021d0",
+  "project_id": "01M1PHBJCHAEQDV65BP5VQPJAP",
+  "folder_id": "01M1PHC02BXPTZ5KX3T6WCYYV2",
+  "org_id": "550422",
+  "session_name": "verify-coverage-switching-keeps-exactly-one-tier-selected",
+  "commit_id": "4d244899-316a-4bed-b526-045f014246b7",
+  "testcase_id": "01M288FB3WP2CYX6139HESH6YX",
+  "executions": [
+    {
+      "execution_id": "32962170-a2c2-47af-ad39-701477fabeaf",
+      "run_kind": "author",
+      "status": "passed",
+      "valid": true,
+      "at": "2026-09-11T12:55:49.591Z"
+    }
+  ]
+}
